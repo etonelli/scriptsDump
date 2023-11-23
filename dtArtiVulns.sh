@@ -13,11 +13,11 @@ case $command in
     if [ $totalOpenVulns -gt $trigger ]; then
       echo Artifact NOT compliant to the required Security Gate.
       echo Total Vulnerabilities found for $2: $totalOpenVulns
-      exit 2
+      exit 1
     else
       echo Artifact OK to the required Security Gate.
       echo Total Vulnerabilities found for $2: $totalOpenVulns
-      exit 1
+      exit 0
     fi
     ;;
   getFullByPgName)
