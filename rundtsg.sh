@@ -9,12 +9,12 @@ echo "Workflow execution id:" "$EXEC_ID"
 while [ "$EXEC_STATUS" != "SUCCESS" ]
 do
  sleep 5
- EXEC_STATUS="$(curl -s -X 'GET' '<IL TUO URL DYNATRACE>/platform/automation/v1/executions/'$EXEC_ID'/tasks?adminAccess=false' -H 'Authorization: Bearer <TUO TOKEN SOLO LETTURA>' | jq -r '.run_vulnerableapp_validation.state')"
+ EXEC_STATUS="$(curl -s -X 'GET' '<IL TUO URL DYNATRACE>/platform/automation/v1/executions/'$EXEC_ID'/tasks?adminAccess=false' -H 'Authorization: Bearer <TUO TOKEN SOLO LETTURA>' | jq -r '.run_validation.state')"
 done
 echo "Esecuzione del workflow terminata:" "$EXEC_STATUS"
 
 #Estrazione e presentazione dei risultati
-EXEC_QG_RESULTS="$(curl -s -X 'GET' '<IL TUO URL DYNATRACE>/platform/automation/v1/executions/'$EXEC_ID'/tasks?adminAccess=false' -H 'Authorization: Bearer <TUO TOKEN SOLO LETTURA>' | jq -r '.run_vulnerableapp_validation.result.validation_details[].status')"
+EXEC_QG_RESULTS="$(curl -s -X 'GET' '<IL TUO URL DYNATRACE>/platform/automation/v1/executions/'$EXEC_ID'/tasks?adminAccess=false' -H 'Authorization: Bearer <TUO TOKEN SOLO LETTURA>' | jq -r '.run_validation.result.validation_details[].status')"
 
 if [ "$EXEC_QG_RESULTS" == "pass" ]; then
  echo "Esecuzione del Security Gate con esito:" "$EXEC_QG_RESULTS"
