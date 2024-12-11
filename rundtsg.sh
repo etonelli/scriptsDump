@@ -16,8 +16,12 @@ echo "Esecuzione del workflow terminata:" "$EXEC_STATUS"
 #Estrazione e presentazione dei risultati
 EXEC_QG_RESULTS="$(curl -s -X 'GET' '<IL TUO URL DYNATRACE>/platform/automation/v1/executions/'$EXEC_ID'/tasks?adminAccess=false' -H 'Authorization: Bearer <TUO TOKEN SOLO LETTURA>' | jq -r '.run_vulnerableapp_validation.result.validation_details[].status')"
 
-echo "Il Security Gate ha avuto esito:" "$EXEC_QG_RESULTS"
-
-EXEC_QG_VULNS="$(curl -s -X 'GET' '<IL TUO URL DYNATRACE>/platform/automation/v1/executions/'$EXEC_ID'/tasks?adminAccess=false' -H 'Authorization: Bearer <TUO TOKEN SOLO LETTURA>' | jq -r '.run_vulnerableapp_validation.result.validation_details[].value')"
-
-echo "Numero di vulnerabilità trovate nel runtime e associate ai processi:" "$EXEC_QG_VULNS"
+if [ "$EXEC_QG_RESULTS" == "pass" ]; then
+ echo "Esecuzione del Security Gate con esito:" "$EXEC_QG_RESULTS"
+ exit 0
+else
+ echo "Esecuzione del Security Gate con esito:" "$EXEC_QG_RESULTS"
+ EXEC_QG_VULNS="$(curl -s -X 'GET' '<IL TUO URL DYNATRACE>/platform/automation/v1/executions/'$EXEC_ID'/tasks?adminAccess=false' -H 'Authorization: Bearer <TUO TOKEN SOLO LETTURA>' | jq -r '.run_validation.result.validation_details[].value')"
+ echo "Numero di vulnerabilità trovate nel runtime e associate ai processi:" "$EXEC_QG_VULNS"
+ exit 1
+fi
