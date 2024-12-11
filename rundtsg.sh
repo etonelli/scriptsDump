@@ -8,8 +8,8 @@ echo "Workflow execution id:" "$EXEC_ID"
 #Ciclo di attesa e verifica che il workflow sia terminato
 while [ "$EXEC_STATUS" != "SUCCESS" ]
 do
-	sleep 5
-	EXEC_STATUS="$(curl -s -X 'GET' '<IL TUO URL DYNATRACE>/platform/automation/v1/executions/'$EXEC_ID'/tasks?adminAccess=false' -H 'Authorization: Bearer <TUO TOKEN SOLO LETTURA>' | jq -r '.run_vulnerableapp_validation.state')"
+ sleep 5
+ EXEC_STATUS="$(curl -s -X 'GET' '<IL TUO URL DYNATRACE>/platform/automation/v1/executions/'$EXEC_ID'/tasks?adminAccess=false' -H 'Authorization: Bearer <TUO TOKEN SOLO LETTURA>' | jq -r '.run_vulnerableapp_validation.state')"
 done
 echo "Esecuzione del workflow terminata:" "$EXEC_STATUS"
 
